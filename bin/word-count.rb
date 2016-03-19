@@ -7,9 +7,9 @@ end
 
 
 Spark.config do
-  set_app_name 'My Example 1'
+  set_app_name 'Word Count'
   set_master   'local[*]'
-  set 'spark.ruby.serializer',           'marshal'
+  set 'spark.ruby.serializer', 'marshal'
   set 'spark.ruby.serializer.batch_size', 2048
 end
 
