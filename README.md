@@ -73,7 +73,18 @@ end
 Spark.start
 sc = Spark.sc
 
-# You application code goes here
+# Your application code goes here
 
 Spark.stop
+```
+
+# Creating an RDD
+To do anything in Spark you'll need to [create an RDD](https://github.com/ondra-m/ruby-spark/wiki/Loading-data). You can convert an existing collection into an RDD...
+```ruby
+rdd = sc.parallelize(0..1000)
+```
+
+or you can read an RDD from the file system. Spark can create an RDD with any [Hadoop InputFormat](https://hadoop.apache.org/docs/r2.7.2/api/org/apache/hadoop/mapred/InputFormat.html). For simplicity we will just use a text file on in the local file system as our data source.
+```ruby
+rdd = sc.text_file('data/atlas.txt')
 ```
