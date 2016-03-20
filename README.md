@@ -50,8 +50,30 @@ Verify that you can run the ruby-spark interactive shell.
 ruby-spark shell
 ```
 
-Clone the [Introduction to Apache Spark in Ruby](https://github.com/ryan-boder/spark-intro-ruby) and cd into that directory.
+Clone the [Introduction to Apache Spark in Ruby](https://github.com/ryan-boder/spark-intro-ruby) project and cd into that directory.
 ```
 git clone https://github.com/ryan-boder/spark-intro-ruby.git
 cd spark-intro-ruby
+```
+
+# Application Template
+
+Ruby-Spark applications need a little boilerplate code. An example application template looks like this.
+
+```ruby
+require 'ruby-spark'
+
+Spark.config do
+  set_app_name 'My Application Name'
+  set_master   'local[*]'
+  set 'spark.ruby.serializer', 'marshal'
+  set 'spark.ruby.serializer.batch_size', 2048
+end
+
+Spark.start
+sc = Spark.sc
+
+# You application code goes here
+
+Spark.stop
 ```
