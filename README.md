@@ -150,3 +150,6 @@ end
 ruby bin/example4.rb
 less example4-output.txt
 ```
+
+# Conclusion
+We've covered what Apache Spark is and why it's having such an impact on big data. We've compared Spark to the Hadoop MapReduce framework and showed it's advantages. We've covered the programming languages officially supported by Spark and showed an fledgling 3rd party open source project that allows Spark programs to be written in Ruby. We've written a few basic Spark examples in Ruby to demonstrate how the Spark programming model works.
