@@ -46,6 +46,7 @@ The Resilient Distributed Dataset (RDD) is is the main concept in Spark. Paralle
 
 ## The Cluster
 A Spark application consists of a driver program that runs on a single node in the cluster - the driver node. The driver program:
+
 1. Creates an RDD by reading it from a distributed file system or parallelizing an existing collection
 2. Dispatches tasks to worker nodes that execute parallel operations on RDD partitions
 3. Collects the results of those parallel computations and returns them to the user
