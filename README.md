@@ -88,3 +88,13 @@ or you can read an RDD from the file system. Spark can create an RDD with any [H
 ```ruby
 rdd = $sc.text_file('data/atlas.txt')
 ```
+
+# Example 1 Counting Lines
+A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to count the number of items in the data set.
+```ruby
+rdd = $sc.text_file('data/fruit.txt')
+puts '---- Number of Lines: ' + rdd.count.to_s
+```
+```
+ruby bin/example1.rb
+```
