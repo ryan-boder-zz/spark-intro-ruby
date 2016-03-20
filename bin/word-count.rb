@@ -14,10 +14,10 @@ Spark.config do
 end
 
 Spark.start
-sc = Spark.sc
+$sc = Spark.sc
 
 
-text_file = sc.text_file(ARGV[0])
+text_file = $sc.text_file(ARGV[0])
 
 
 words = text_file.flat_map(lambda{ |x| x.split(/[\s.,!?"']+/) })
