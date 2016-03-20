@@ -1,7 +1,4 @@
-# spark-intro-ruby
-Introduction to Apache Spark in Ruby
-
-# What is Apache Spark?
+# Introduction to Apache Spark in Ruby
 [Apache Spark](http://spark.apache.org/) is a general purpose framework for processing large data sets in parallel on a computing cluster. It's used to efficiently crunch big data by distributing the computation across many nodes using an abstraction called a [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) (RDD). It was originally developed at [UC Berkeley AMPLab](https://amplab.cs.berkeley.edu/projects/spark-lightning-fast-cluster-computing/).
 
 Spark is used to solve similar problems to the [Hadoop MapReduce framework](http://hortonworks.com/hadoop/mapreduce/). It's [gained a lot of ground on MapReduce](https://adtmag.com/articles/2016/01/20/syncsort-hadoop-survey.aspx) in terms of market share and developer interest due to it's better performance, generality and simplicity. Spark can run within the Hadoop ecosystem ([YARN](http://hortonworks.com/hadoop/yarn/), [HDFS](http://hortonworks.com/hadoop/hdfs/)), in a non-Hadoop cluster management system ([Mesos](http://mesos.apache.org/)) or even as it's own [standalone cluster](http://spark.apache.org/docs/latest/spark-standalone.html).
