@@ -11,7 +11,6 @@ Spark.start
 $sc = Spark.sc
 
 rdd = $sc.text_file('data/fruit.txt')
-
 puts '---- Number of Lines: ' + rdd.count.to_s
 
 Spark.stop

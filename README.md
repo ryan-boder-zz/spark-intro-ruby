@@ -79,7 +79,7 @@ Spark.stop
 ```
 
 # Creating an RDD
-To do anything in Spark you'll need to [create an RDD](https://github.com/ondra-m/ruby-spark/wiki/Loading-data). You can convert an existing collection into an RDD...
+To do anything in Spark you'll need to [load data](https://github.com/ondra-m/ruby-spark/wiki/Loading-data) into an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). You can convert an existing collection into an RDD...
 ```ruby
 rdd = $sc.parallelize(0..1000)
 ```
@@ -97,4 +97,17 @@ puts '---- Number of Lines: ' + rdd.count.to_s
 ```
 ```
 ruby bin/example1.rb
+```
+
+# Example 2 Map Reduce
+Spark can easily handle Map Reduce applications with an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). This example takes an input range or 0 to 1000, doubles all the values making it 0 to 2000, sums all the values and divides by the total count to calculate the average.
+```ruby
+input = $sc.parallelize(0..1000)
+doubled = input.map(lambda { |x| x * 2 })
+summed = doubled.reduce(lambda { |sum, x| sum + x })
+average = summed / input.count
+puts '---- Average: ' + average.to_s
+```
+```
+ruby bin/example2.rb
 ```
