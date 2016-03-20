@@ -41,3 +41,17 @@ Spark itself is written in Scala and runs in a Java Virtual Machine (JVM). The S
 Spark does not support writing applications in [Ruby](https://www.ruby-lang.org). The code examples in this presentation are written in Ruby because this is the [Columbus Ruby Brigade](http://columbusrb.com/). In practice, if you are writing a real Spark application you would almost certainly use one of the languages officially supported by Spark.
 
 However, [Ondřej Moravčík](https://github.com/ondra-m) has done some excellent work in writing a Ruby wrapper for Spark allowing Spark applications to be written in Ruby. It's a gem called [Ruby-Spark](https://github.com/ondra-m/ruby-spark) with a nice [getting started tutorial](https://github.com/ondra-m/ruby-spark). The code mostly works but the project is not production ready and [is more of a proof of concept](https://github.com/ondra-m/ruby-spark/issues/6) at this point. If you're a Ruby developer and want to contribute to the future of big data this might be a great project for you to join. Today (3/21/16) Ruby-Spark [appears to be somewhat stagnant](https://github.com/ondra-m/ruby-spark/issues/29) and could really use additional help.
+
+# Installation & Setup
+Follow the Ruby-Spark installation instructions in the [tutorial](http://ondra-m.github.io/ruby-spark/) or in the [README](https://github.com/ondra-m/ruby-spark).
+
+Verify that you can run the ruby-spark interactive shell.
+```
+ruby-spark shell
+```
+
+Clone the [Introduction to Apache Spark in Ruby](https://github.com/ryan-boder/spark-intro-ruby) and cd into that directory.
+```
+git clone https://github.com/ryan-boder/spark-intro-ruby.git
+cd spark-intro-ruby
+```
