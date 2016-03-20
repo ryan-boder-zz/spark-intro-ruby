@@ -21,7 +21,9 @@ Spark often achieves [10x to 100x better performance](http://spark.apache.org/ne
 Spark uses a [distributed acyclic graph](http://www.srinivastata.com/tez/directed-acyclic-graph-dag-strength-of-spark-and-tez/) (DAG) computing model which was pioneered by [Microsoft's Dryad Project](http://research.microsoft.com/en-us/projects/dryad/). MapReduce treats each Map-Reduce step as an independent job. For iterative applications that consist of multiple computation steps Spark's DAG scheduler has a holistic view of the entire computation and can make global optimizations using this additional information that MapReduce cannot.
 
 ### In-Memory Computation
-Spark uses in-memory computation when possible by memory caching RDDs and only spills results to disk when necessary. MapReduce reads the input for each Map-Reduce job from the file system and writes the results back to the file system to be used as the input for the next job. MapReduce depends on it's distributed file system (HDFS) for fault tolerance. When a node fails MapReduce already has the results of that node's computations safely stored in HDFS. Spark is able to achieve fault tolerance with it's memory cached RDDs [using a restricted form of shared memory, based on coarse-grained transformations rather than fine-grained updates to shared state](https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf). In other words the data in an RDD is immutable (read-only) and data changes resulting from computations are shared with other nodes by sharing a log of the high level transformations that have occurred to partitions of data rather than sharing all the individual changed values. When a node fails another node can backtrack in the DAG and redo any lost computations.
+Spark uses in-memory computation when possible by memory caching RDDs and only spills results to disk when necessary. MapReduce reads the input for each Map-Reduce job from the file system and writes the results back to the file system to be used as the input for the next job.
+
+MapReduce depends on it's distributed file system (HDFS) for fault tolerance. When a node fails MapReduce already has the results of that node's computations safely stored in HDFS. Spark is able to achieve fault tolerance with it's memory cached RDDs [using a restricted form of shared memory, based on coarse-grained transformations rather than fine-grained updates to shared state](https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf). In other words the data in an RDD is immutable (read-only) and data changes resulting from computations are shared with other nodes by sharing a log of the high level transformations that have occurred to partitions of data rather than sharing all the individual changed values. When a node fails another node can backtrack in the DAG and redo any lost computations.
 
 ### Practical Improvements
 While the DAG model and memory caching are largely responsible for Spark's better performance, Spark also makes practical improvements over MapReduce. For example, MapReduce starts up a new JVM for each Map-Reduce step while [Spark keeps an executor JVM running on each node](https://www.quora.com/What-makes-Spark-faster-than-MapReduce) so that dispatched tasks can begin doing real work sooner without the overhead of starting a new JVM.
@@ -32,6 +34,26 @@ Spark's RDD programming model is more general purpose than MapReduce. In fact, m
 Hadoop MapReduce forces every application into a series of independent jobs that consist of a map operation followed by a reduce operation. The MapReduce programming model was designed at [Google Labs](http://research.google.com/archive/mapreduce.html) to handle web search and is well suited for that. It was not intended to be a general purpose parallel programming framework. It evolved as such and has been used as a general purpose framework to meet the exploding demand for an open source big data processing platform as Hadoop has grown. As the variety of big data problems has increased this has resulted in applications that aren't a natural fit for the MapReduce model being shoehorned into MapReduce just so they can run in a Hadoop cluster.
 
 Spark is a generalization of MapReduce. It allows problems that are natural for the MapReduce model to be implemented as MapReduce applications but supports other operations just as well. The more domain specific add-ons such as Spark Streaming and MLlib are implemented as libraries built on the same general purposes RDD model so applications can easily combine these libraries in the same application.
+
+# Spark Programming Model
+The Resilient Distributed Dataset (RDD) is is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
+
+## Transformations
+[Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
+
+## Actions
+[Actions](http://spark.apache.org/docs/latest/programming-guide.html#actions) are operations which return a value to the driver program after running a computation on a dataset. Example actions are reduce, collect and count. Every Spark program will have at least 1 action. Specifying transformations in the driver program simply builds up the DAG for later execution while specifying actions causes Spark to execute operations in the DAG and produce a result.
+
+## The Cluster
+A Spark application consists of a driver program that runs on a single node in the cluster - the driver node. The driver program:
+1. Creates an RDD by reading it from a distributed file system or parallelizing an existing collection
+2. Dispatches tasks to worker nodes that execute parallel operations on RDD partitions
+3. Collects the results of those parallel computations and returns them to the user
+
+## Lambda Expressions and Closures
+To perform useful computations we often need to [pass custom code](http://spark.apache.org/docs/latest/programming-guide.html#passing-functions-to-spark) from the driver program to parallel RDD operations. We pass custom code using lambda expressions, anonymous functions, function objects, static or global functions depending on the programming language used.
+
+Data inputs are often passed to lambda expressions using [closures](http://spark.apache.org/docs/latest/programming-guide.html#understanding-closures-a-nameclosureslinka). Closures allow a lambda expression to access and modify variables defined outside of it's scope. In Spark we have to be careful about passing lambda expressions to operations that modify variables outside of their scope. On a single node modifying a variable in a closure is a legitimate way to share the variable between instances of the lambda. In Spark, since the lambda is running in parallel on different nodes, each with it's own memory space, sharing variables like this will not work. Doing so will appear to work correctly during development on a single node but will fail when running in a [multi-node cluster](http://spark.apache.org/docs/latest/programming-guide.html#local-vs-cluster-modes).
 
 # Programming Languages
 ## The Supported Languages
