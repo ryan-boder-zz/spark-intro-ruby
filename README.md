@@ -32,3 +32,12 @@ Spark's RDD programming model is more general purpose than MapReduce. In fact, m
 Hapoop MapReduce forces every application into a series of steps (jobs) that consist of a map operation followed by a reduce operation. The MapReduce programming model was designed at Google Labs to handle a specific problem - web search. It was not intended to be a general purpose programming framework. It only evolved and has been used as a general purpose framework as Hadoop grew to meet the exploding demand for an open source big data processing platform. As the variety of big data problems has expanded this has resulted in problems that aren't a natural fit for the MapReduce model being shoehorned into MapReduce just so that can run in Hadoop.
 
 Spark is a generalization of MapReduce. It allows problems that are natural for MapReduce to be implemented as MapReduce applications but supports other programming models just as well. By implementing the more problem-specific add-ons such as Spark Streaming and MLib as libraries built on the same general purposes RDD model, applications can easily combine these libraries in the same application.
+
+# Programming Languages
+## The Supported Languages
+Spark itself is written in Scala and runs in a Java Virtual Machine (JVM). The Spark distribution has APIs for writing Spark applications in Scala, Java, Python and R. It even provides interactive command line shells for Scala, Python and R. These languages have long been widely established in big data processing and were natural choices for the market Spark is intended to serve.
+
+## What about Ruby?
+Spark does not support writing applications in Ruby. The code examples in this presentation are written in Ruby because this is the Columbus Ruby Brigade. In practice, if you are writing a real Spark application you would almost certainly use one of the languages offically supported by Spark.
+
+However, Ondřej Moravčík has done some excellent work in writing a Ruby wrapper for Spark allowing Spark applications to be written in Ruby. It's called ruby-spark and is available on Github. The code mostly works but the project is not production ready and is more of a proof of concept at this point. If you're a Ruby developer and want to be involved in the future of big data this might be a great project to join and contrinute to.
