@@ -89,8 +89,8 @@ or you can read an RDD from the file system. Spark can create an RDD with any [H
 rdd = $sc.text_file('data/atlas.txt')
 ```
 
-# Example 1 Counting Lines
-A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to count the number of items in the data set.
+# Example 1: Counting Items
+A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to count the number of items in the data set. In this case items are lines in a text file.
 ```ruby
 rdd = $sc.text_file('data/fruit.txt')
 puts '---- Number of Lines: ' + rdd.count.to_s
@@ -99,7 +99,7 @@ puts '---- Number of Lines: ' + rdd.count.to_s
 ruby bin/example1.rb
 ```
 
-# Example 2 Map Reduce
+# Example 2: Map Reduce
 Spark can easily handle Map Reduce applications with an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). This example takes an input range or 0 to 1000, doubles all the values making it 0 to 2000, sums all the values and divides by the total count to calculate the average.
 ```ruby
 input = $sc.parallelize(0..1000)
@@ -110,4 +110,17 @@ puts '---- Average: ' + average.to_s
 ```
 ```
 ruby bin/example2.rb
+```
+
+# Example 3: Word Count
+The obligatory Hello World of data analytics is to count the number of each word in a text file. We can accomplish this by splitting the file by whitespace, mapping it to a pairs (2 element arrays) containing the word (key) and a count of 1 (value), then reducing the pairs by key (the word) summing up the counts.
+```ruby
+text_file = $sc.text_file('data/fruit.txt')
+words = text_file.flat_map(lambda { |x| x.split() })
+pairs = words.map(lambda { |word| [word, 1] })
+counts = pairs.reduce_by_key(lambda { |a, b| a + b })
+puts '---- Word Counts: ' + counts.collect.to_s
+```
+```
+ruby bin/example3.rb
 ```

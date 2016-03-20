@@ -5,3 +5,6 @@ bananas
 peaches
 watermelon
 pears
+grapes
+peaches
+grapes
