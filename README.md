@@ -91,6 +91,7 @@ rdd = $sc.text_file('data/atlas.txt')
 
 # Example 1: Counting Items
 A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to count the number of items in the data set. In this case items are lines in a text file.
+
 ```ruby
 rdd = $sc.text_file('data/fruit.txt')
 puts '---- Number of Lines: ' + rdd.count.to_s
@@ -101,6 +102,7 @@ ruby bin/example1.rb
 
 # Example 2: Map Reduce
 Spark can easily handle Map Reduce applications with an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). This example takes an input range or 0 to 1000, doubles all the values making it 0 to 2000, sums all the values and divides by the total count to calculate the average.
+
 ```ruby
 input = $sc.parallelize(0..1000)
 doubled = input.map(lambda { |x| x * 2 })
@@ -114,6 +116,7 @@ ruby bin/example2.rb
 
 # Example 3: Word Count
 The obligatory Hello World of data analytics is to count the number of each word in a text file. We can accomplish this by splitting the file by whitespace, mapping it to a pairs (2 element arrays) containing the word (key) and a count of 1 (value), then reducing the pairs by key (the word) summing up the counts.
+
 ```ruby
 text_file = $sc.text_file('data/fruit.txt')
 words = text_file.flat_map(lambda { |x| x.split() })
@@ -123,4 +126,27 @@ puts '---- Word Counts: ' + counts.collect.to_s
 ```
 ```
 ruby bin/example3.rb
+```
+
+# Example 4: Better Word Count
+The previous word count was not quite as robust as we would like it to be. Let's take it a little further. This time we'll
+- Split with a regular expression to properly handle newlines and special characters
+- Convert words to lower case so Hello and hello are counted as the same word
+- Sort the results by word count from highest to lowest
+- Write the results to a file so we can word count files with many words
+
+```ruby
+text_file = $sc.text_file('data/atlas.txt')
+words = text_file.flat_map(lambda { |x| x.split(/[\s.,!?"']+/) })
+pairs = words.map(lambda { |word| [word.downcase, 1] })
+counts = pairs.reduce_by_key(lambda { |a, b| a + b })
+results = counts.sort_by(lambda { |x| x[1] }, false).collect
+
+File.open('example4-output.txt', 'w') do |file|
+  results.each { |x| file.puts(x[0] + ': ' + x[1].to_s) unless x[0].empty? }
+end
+```
+```
+ruby bin/example4.rb
+less example4-output.txt
 ```
