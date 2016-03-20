@@ -57,11 +57,11 @@ To perform useful computations we often need to [pass custom code](http://spark.
 Data inputs are often passed to lambda expressions using [closures](http://spark.apache.org/docs/latest/programming-guide.html#understanding-closures-a-nameclosureslinka). Closures allow a lambda expression to access and modify variables defined outside of it's scope. In Spark we have to be careful about passing lambda expressions to operations that modify variables outside of their scope. On a single node modifying a variable in a closure is a legitimate way to share the variable between instances of the lambda. In Spark, since the lambda is running in parallel on different nodes, each with it's own memory space, sharing variables like this will not work. Doing so will appear to work correctly during development on a single node but will fail when running in a [multi-node cluster](http://spark.apache.org/docs/latest/programming-guide.html#local-vs-cluster-modes).
 
 # Programming Languages
-## The Supported Languages
+## Supported Languages
 Spark itself is written in Scala and runs in a Java Virtual Machine (JVM). The Spark distribution has APIs for writing Spark applications in [Scala](http://www.scala-lang.org/), [Java](https://www.java.com), [Python](https://www.python.org/) and [R](https://www.r-project.org). It even provides interactive command line shells for Scala, Python and R. These languages have long been widely established as big data tools and were natural choices for the market Spark is intended to serve.
 
 ## What about Ruby?
-Spark does not support writing applications in [Ruby](https://www.ruby-lang.org). The code examples in this presentation are written in Ruby because this is the [Columbus Ruby Brigade](http://columbusrb.com/). In practice, if you are writing a real Spark application you would almost certainly use one of the languages officially supported by Spark.
+Spark does not support writing applications in [Ruby](https://www.ruby-lang.org). The code examples in this presentation are written in Ruby because this is the [Columbus Ruby Brigade](http://columbusrb.com/). If you are writing a real Spark application you would almost certainly use one of the languages officially supported by Spark.
 
 However, [Ondřej Moravčík](https://github.com/ondra-m) has done some excellent work in writing a Ruby wrapper for Spark allowing Spark applications to be written in Ruby. It's a gem called [Ruby-Spark](https://github.com/ondra-m/ruby-spark) with a nice [getting started tutorial](https://github.com/ondra-m/ruby-spark). The code mostly works but the project is not production ready and [is more of a proof of concept](https://github.com/ondra-m/ruby-spark/issues/6) at this point. If you're a Ruby developer and want to contribute to the future of big data this might be a great project for you to join. Today (3/21/16) Ruby-Spark [appears to be somewhat stagnant](https://github.com/ondra-m/ruby-spark/issues/29) and could really use additional help.
 
@@ -172,6 +172,31 @@ end
 ```
 ruby bin/example4.rb
 less example4-output.txt
+```
+
+# Example 5: Process CSV File
+This example processes Alexa data in a CSV file and prints the average ranks and the most improved delta.
+```ruby
+# RDD the CSV and filter out the header
+csv = $sc.text_file('data/alexa.csv').filter(lambda { |x| !x.start_with?('Date') })
+
+# Split into columns and convert to integers
+data = csv.map(lambda do |x|
+  x.split(',').map { |y| y.strip.to_i }
+end)
+
+# Sum the ranks and find the most improved delta
+results = data.reduce(lambda do |x, y|
+  [nil, x[1] + y[1], [x[2], y[2]].min, x[3] + y[3]]
+end).collect.to_a
+
+avgGlobalRank = results[1] / csv.count
+minGlobalDelta = results[2]
+avgUsRank = results[3] / csv.count
+puts "---- Average Global Rank: #{avgGlobalRank}, Best Global Delta: #{minGlobalDelta}, Average US Rank: #{avgUsRank}"
+```
+```
+ruby bin/example5.rb
 ```
 
 # Conclusion
