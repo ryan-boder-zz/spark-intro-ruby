@@ -210,7 +210,7 @@ ruby bin/example5.rb
 ```
 
 # Example 6: Estimate Pi
-This example estimates Pi using Monte Carlo simulations.
+This example estimates Pi using the Monte Carlo method.
 ```ruby
 n = 10_000_000
 hits = $sc.parallelize(1..n).map(lambda do |_|
