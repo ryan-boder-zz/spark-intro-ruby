@@ -10,7 +10,7 @@ In addition to general purpose data analytics processing with RDD's Spark comes 
 - [GraphX](http://spark.apache.org/graphx/) for iterative graph computation and ETL (similar to [Apache Giraph](http://giraph.apache.org/))
 
 # Spark vs Hadoop MapReduce
-Why has Spark gained so much momentum in the big data space - often at the expense of the tried and true Hadoop MapReduce framework?
+Why has Spark gained so much momentum in the big data space and overtaken the tried and true Hadoop MapReduce framework?
 
 Spark [addresses some well known shortcomings of MapReduce](http://www.computerweekly.com/feature/Spark-versus-MapReduce-which-way-for-enterprise-IT). While MapReduce has been a dependable foundation for big data applications through the evolution of data science, Spark has had the advantage of learning from that existing work and has been developed to align with the state of the art and solve a wider class of problems.
 
