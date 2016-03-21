@@ -38,18 +38,18 @@ Spark is a generalization of MapReduce. It allows problems that are natural for 
 # Spark Programming Model
 The [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) (RDD) is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
 
-## Transformations
-[Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
-
-## Actions
-[Actions](http://spark.apache.org/docs/latest/programming-guide.html#actions) are operations which return a value to the driver program after running a computation on a dataset. Example actions are reduce, collect and count. Every Spark program will have at least 1 action. Specifying transformations in the driver program simply builds up the DAG for later execution but specifying actions causes Spark to execute operations (actions and dependency transformations) in the DAG and produce a result.
-
 ## The Cluster
 A Spark application consists of a driver program that runs on a single node in the cluster - the driver node. The driver program:
 
 1. Creates an RDD by reading it from a distributed file system or parallelizing an existing collection
 2. Dispatches tasks to worker nodes that execute parallel operations on RDD partitions
 3. Collects the results of those parallel computations and returns them to the user
+
+## Transformations
+[Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
+
+## Actions
+[Actions](http://spark.apache.org/docs/latest/programming-guide.html#actions) are operations which return a value to the driver program after running a computation on a dataset. Example actions are reduce, collect and count. Every Spark program will have at least 1 action. Specifying transformations in the driver program simply builds up the DAG for later execution but specifying actions causes Spark to execute operations (actions and dependency transformations) in the DAG and produce a result.
 
 ## Lambda Expressions and Closures
 To perform useful computations we often need to [pass custom code](http://spark.apache.org/docs/latest/programming-guide.html#passing-functions-to-spark) from the driver program to parallel RDD operations. We pass this custom code using lambda expressions, anonymous functions, function objects, static or global functions depending on the programming language used.
