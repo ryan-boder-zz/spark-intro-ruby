@@ -36,7 +36,7 @@ Hadoop MapReduce forces every application into a series of independent jobs that
 Spark is a generalization of MapReduce. It allows problems that are natural for the MapReduce model to be implemented as MapReduce applications but supports other parallel operations just as well. The more domain specific add-ons such as Spark Streaming and MLlib are implemented as libraries built on the same general purposes RDD model so applications can easily combine these libraries in the same application.
 
 # Spark Programming Model
-The Resilient Distributed Dataset (RDD) is is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
+The [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) (RDD) is is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
 
 ## Transformations
 [Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
@@ -61,12 +61,12 @@ Input variables are often passed to lambda expressions using [closures](http://s
 Spark itself is written in Scala and runs in a Java Virtual Machine (JVM). The Spark distribution has APIs for writing Spark applications in [Scala](http://www.scala-lang.org/), [Java](https://www.java.com), [Python](https://www.python.org/) and [R](https://www.r-project.org). It even provides interactive command line shells for Scala, Python and R. These languages have long been widely established as big data tools and were natural choices for the market Spark is intended to serve.
 
 ## What about Ruby?
-Spark does not support writing applications in [Ruby](https://www.ruby-lang.org). The code examples in this presentation are written in Ruby because this is the [Columbus Ruby Brigade](http://columbusrb.com/). If you are writing a real Spark application you would almost certainly use one of the languages officially supported by Spark.
+Spark does not support writing applications in [Ruby](https://www.ruby-lang.org). The code examples in this presentation are written in Ruby because this is the [Columbus Ruby Brigade](http://columbusrb.com/). If you are writing a real Spark application you would probably use one of the languages officially supported by Spark.
 
 However, [Ondřej Moravčík](https://github.com/ondra-m) has done some excellent work in writing a Ruby wrapper for Spark allowing Spark applications to be written in Ruby. It's a gem called [Ruby-Spark](https://github.com/ondra-m/ruby-spark) with a nice [getting started tutorial](https://github.com/ondra-m/ruby-spark). The code mostly works but the project is not production ready and [is more of a proof of concept](https://github.com/ondra-m/ruby-spark/issues/6) at this point. If you're a Ruby developer and want to contribute to the future of big data this might be a great project for you to join. Today (3/21/16) Ruby-Spark [appears to be somewhat stagnant](https://github.com/ondra-m/ruby-spark/issues/29) and could really use additional help.
 
 # Installation & Setup
-Follow the Ruby-Spark installation instructions in the [tutorial](http://ondra-m.github.io/ruby-spark/) or in the [README](https://github.com/ondra-m/ruby-spark).
+Follow the Ruby-Spark installation instructions in the [tutorial](http://ondra-m.github.io/ruby-spark/) and/or in the [README](https://github.com/ondra-m/ruby-spark).
 
 Verify that you can run the ruby-spark interactive shell.
 ```
@@ -80,7 +80,6 @@ cd spark-intro-ruby
 ```
 
 # Application Template
-
 Ruby-Spark applications need a little boilerplate code. An example application template looks like this.
 
 ```ruby
@@ -101,7 +100,7 @@ $sc = Spark.sc
 Spark.stop
 ```
 
-If you use the interactive `ruby-spark shell` then this boilerplate code is already done for you and you can just start using `$sc` directly.
+If you use the interactive `ruby-spark shell` then this boilerplate code is already done for you and you can just start using the Spark context `$sc` directly.
 ```
 ruby-spark shell
 ...
@@ -111,18 +110,18 @@ ruby-spark shell
 ```
 
 # Creating an RDD
-To do anything in Spark you'll need to [load data](https://github.com/ondra-m/ruby-spark/wiki/Loading-data) into an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). You can convert an existing collection into an RDD...
+To do anything in Spark you'll need to [load data](https://github.com/ondra-m/ruby-spark/wiki/Loading-data) into an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). You can [convert an existing collection in your driver program into an RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/Context#parallelize-instance_method)...
 ```ruby
 rdd = $sc.parallelize(0..1000)
 ```
 
-or you can read an RDD from the file system. Spark can create an RDD with any [Hadoop InputFormat](https://hadoop.apache.org/docs/r2.7.2/api/org/apache/hadoop/mapred/InputFormat.html). For simplicity we will just use a text file on in the local file system as our data source.
+or you can [read an RDD from the file system](http://www.rubydoc.info/gems/ruby-spark/Spark/Context#text_file-instance_method). Spark can create an RDD with any [Hadoop InputFormat](https://hadoop.apache.org/docs/r2.7.2/api/org/apache/hadoop/mapred/InputFormat.html). For simplicity we will just use a text file on in the local file system as our data source.
 ```ruby
 rdd = $sc.text_file('data/atlas.txt')
 ```
 
 # Example 1: Counting Items
-A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to count the number of items in the data set. In this case items are lines in a text file.
+A really simple example is to create an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD) and use it to [count](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD#count-instance_method) the number of items in the data set. In this case items are lines in a text file.
 
 ```ruby
 rdd = $sc.text_file('data/fruit.txt')
@@ -133,7 +132,7 @@ ruby bin/example1.rb
 ```
 
 # Example 2: Map Reduce
-Spark can easily handle Map Reduce applications with an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). This example takes an input range or 0 to 1000, doubles all the values making it 0 to 2000, sums all the values and divides by the total count to calculate the average.
+Spark can easily handle [Map](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD#map-instance_method) [Reduce](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD#reduce-instance_method) applications with an [RDD](http://www.rubydoc.info/gems/ruby-spark/Spark/RDD). This example takes an input range or 0 to 1000, doubles all the values making it 0 to 2000, sums all the values and divides by the total count to calculate the average.
 
 ```ruby
 input = $sc.parallelize(0..1000)
@@ -225,4 +224,4 @@ ruby bin/example6.rb
 ```
 
 # Conclusion
-We've covered what Apache Spark is and why it's having such an impact on big data. We've compared Spark to the Hadoop MapReduce framework and showed it's advantages. We've covered the programming languages officially supported by Spark and showed an fledgling 3rd party open source project that allows Spark programs to be written in Ruby. We've written a few basic Spark examples in Ruby to demonstrate how the Spark programming model works.
+We've covered what Apache Spark is and why it's having such an impact on big data. We've compared Spark to the Hadoop MapReduce framework and showed Sparks advantages. We've covered the programming languages officially supported by Spark and showed an fledgling 3rd party open source project that allows Spark programs to be written in Ruby. We've written a few basic Spark examples in Ruby to demonstrate how the Spark programming model works.
