@@ -1,5 +1,10 @@
 require 'ruby-spark'
 
+if ARGV.length != 1
+  puts 'Usage: <n>'
+  exit
+end
+
 Spark.config do
   set_app_name 'Estimate Pi'
   set_master 'local[*]'
@@ -10,7 +15,7 @@ end
 Spark.start
 $sc = Spark.sc
 
-n = 10_000_000
+n = ARGV[0].to_i
 hits = $sc.parallelize(1..n).map(lambda do |_|
   x = rand * 2 - 1
   y = rand * 2 - 1

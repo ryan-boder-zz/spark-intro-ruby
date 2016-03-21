@@ -209,7 +209,7 @@ hits = $sc.parallelize(1..n).map(lambda do |_|
   x**2 + y**2 < 1 ? 1 : 0
 end).sum
 pi = 4.0 * hits / n
-puts "---- Pi ~ #{pi}"
+puts "---- Pi ~ #{pi} in #{n} simulations"
 ```
 ```
 ruby bin/example6.rb
