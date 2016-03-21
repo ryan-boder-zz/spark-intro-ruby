@@ -96,9 +96,18 @@ end
 Spark.start
 $sc = Spark.sc
 
-# Your application code goes here
+# Your driver application code goes here
 
 Spark.stop
+```
+
+If you use the interactive `ruby-spark shell` then this boilerplate code is already done for you and you can just start using `$sc` directly.
+```
+ruby-spark shell
+...
+[1] pry(main)> $sc.parallelize([1, 2, 3]).sum
+...
+=> 6
 ```
 
 # Creating an RDD
