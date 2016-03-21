@@ -1,7 +1,7 @@
 require 'ruby-spark'
 
 Spark.config do
-  set_app_name 'Counting Lines'
+  set_app_name 'Map Reduce'
   set_master 'local[*]'
   set 'spark.ruby.serializer', 'marshal'
   set 'spark.ruby.serializer.batch_size', 2048

@@ -199,5 +199,21 @@ puts "---- Average Global Rank: #{avgGlobalRank}, Best Global Delta: #{minGlobal
 ruby bin/example5.rb
 ```
 
+# Example 6: Estimate Pi
+This example estimates Pi using Monte Carlo simulations.
+```ruby
+n = 10_000_000
+hits = $sc.parallelize(1..n).map(lambda do |_|
+  x = rand * 2 - 1
+  y = rand * 2 - 1
+  x**2 + y**2 < 1 ? 1 : 0
+end).sum
+pi = 4.0 * hits / n
+puts "---- Pi ~ #{pi}"
+```
+```
+ruby bin/example6.rb
+```
+
 # Conclusion
 We've covered what Apache Spark is and why it's having such an impact on big data. We've compared Spark to the Hadoop MapReduce framework and showed it's advantages. We've covered the programming languages officially supported by Spark and showed an fledgling 3rd party open source project that allows Spark programs to be written in Ruby. We've written a few basic Spark examples in Ruby to demonstrate how the Spark programming model works.
