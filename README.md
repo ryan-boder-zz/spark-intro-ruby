@@ -42,8 +42,9 @@ The [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programm
 A Spark application consists of a driver program that runs on a single node in the cluster - the driver node. The driver program:
 
 1. Creates an RDD by reading it from a distributed file system or parallelizing an existing collection
-2. Dispatches tasks to worker nodes that execute parallel operations on RDD partitions
-3. Collects the results of those parallel computations and returns them to the user
+2. Builds a DAG that represents the entire computation.
+3. Dispatches tasks to worker nodes that execute parallel operations on RDD partitions
+4. Collects the results of those parallel computations and returns them to the user
 
 ## Transformations
 [Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
