@@ -173,6 +173,7 @@ pairs = words.map(lambda { |word| [word.downcase, 1] })
 counts = pairs.reduce_by_key(lambda { |a, b| a + b })
 results = counts.sort_by(lambda { |x| x[1] }, false).collect
 
+# Ruby-Spark seems to be missing the RDD.save_as_text_file method
 File.open('example4-output.txt', 'w') do |file|
   results.each { |x| file.puts(x[0] + ': ' + x[1].to_s) unless x[0].empty? }
 end
