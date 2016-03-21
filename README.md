@@ -36,7 +36,7 @@ Hadoop MapReduce forces every application into a series of independent jobs that
 Spark is a generalization of MapReduce. It allows problems that are natural for the MapReduce model to be implemented as MapReduce applications but supports other parallel operations just as well. The more domain specific add-ons such as Spark Streaming and MLlib are implemented as libraries built on the same general purposes RDD model so applications can easily combine these libraries in the same application.
 
 # Spark Programming Model
-The [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) (RDD) is is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
+The [Resilient Distributed Dataset](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) (RDD) is the main concept in Spark. Parallel computations are done by performing operations on an RDD. [RDD operations](http://spark.apache.org/docs/latest/programming-guide.html#rdd-operations) are categorized as either transformations or actions.
 
 ## Transformations
 [Transformations](http://spark.apache.org/docs/latest/programming-guide.html#transformations) are operations which create a new dataset from an existing one. Example transformations are map, filter, union, intersection and sort. Transformations are performed lazily. They are only executed when they are needed as an input to an action.
